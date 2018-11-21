@@ -1,0 +1,10 @@
+.mainPane {
+    -fx-font-family: Verdana;
+}
+
+.text-area > .scroll-pane{
+
+    -fx-hbar-policy:never;
+    -fx-vbar-policy:never;
+
+}

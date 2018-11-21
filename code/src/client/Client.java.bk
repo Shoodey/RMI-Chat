@@ -1,0 +1,109 @@
+package client;
+
+import helpers.Config;
+import server.ServerInterface;
+
+import javax.swing.*;
+import java.awt.*;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
+public class ClientOld extends UnicastRemoteObject {
+
+    private ServerInterface server;
+
+    private JFrame frame = new JFrame("RMI Chat");
+    private JTextField usernameField;
+    private JTextArea chatArea;
+    private JTextField chatField;
+    private String username;
+
+    private ClientOld(ServerInterface server) throws RemoteException {
+        this.server = server;
+    }
+
+    public static void main(String[] args) throws RemoteException, NotBoundException {
+        Registry registry = LocateRegistry.getRegistry(Config.SERVER_IP, Config.PORT);
+        ServerInterface server = (ServerInterface) registry.lookup(Config.SERVER_NAME);
+    }
+
+    public void show(String username, String message) {
+        chatArea.append(username + ": " + message + "\n");
+    }
+
+    public void run() {
+        initLogin();
+    }
+
+    private void initLogin() {
+        JPanel usernamePanel = new JPanel();
+
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameField = new JTextField(20);
+        JButton loginButton = new JButton("Login");
+        usernamePanel.setLayout(new FlowLayout());
+        usernamePanel.add(usernameLabel);
+        usernamePanel.add(usernameField);
+        usernamePanel.add(loginButton);
+        frame.setContentPane(usernamePanel);
+
+        frame.setVisible(true);
+        frame.setSize(300, 150);
+
+        loginButton.addActionListener(e -> {
+            try {
+                submit(usernameField.getText());
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        });
+    }
+
+    private void submit(String username) throws RemoteException {
+        this.username = username;
+        frame.setContentPane(getChatLayout(username));
+        frame.invalidate();
+        frame.validate();
+    }
+
+    private JPanel getChatLayout(String username) throws RemoteException {
+        frame.setSize(600, 400);
+        frame.setTitle("RMI Chat  - " + username);
+
+        JPanel chatPanel = new JPanel();
+        chatPanel.setLayout(new BorderLayout());
+
+        chatArea = new JTextArea();
+        chatArea.setEditable(false);
+        chatArea.setSize(600, 300);
+        chatField = new JTextField();
+        JButton sendButton = new JButton("Send");
+
+        chatPanel.add(chatArea, BorderLayout.NORTH);
+        chatPanel.add(chatField, BorderLayout.CENTER);
+        chatPanel.add(sendButton, BorderLayout.SOUTH);
+
+        server.send(username, "has logged in.");
+
+        sendButton.addActionListener(e -> {
+            if (chatField.getText().length() > 0) {
+                String message = chatField.getText();
+                chatField.setText("");
+                try {
+                    server.send(username, message);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        return chatPanel;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+}

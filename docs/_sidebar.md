@@ -1,0 +1,5 @@
+* [RMI Chat Application](/)
+* [Server Setup](server-setup.md)
+* [Client Setup](client-setup.md)
+* [Helpers](helpers.md)
+* [Features Demonstration](features.md)

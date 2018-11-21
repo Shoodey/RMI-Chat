@@ -1,0 +1,13 @@
+Greetings sir,
+
+I was unable to package the projects as executables and will be using a quick work around.
+
+Please find the source code for the projects alongside the instructions, video demo as well as the report in the following link:
+
+https://github.com/Shoodey/RMI-Chat
+
+Hoping that this will not be of much trouble.
+
+Sincerely,
+
+EL AMRI Ali

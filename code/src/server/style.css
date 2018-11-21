@@ -1,0 +1,25 @@
+.mainPane {
+
+    -fx-font-family: Verdana;
+}
+
+.button-success, .button-danger {
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+}
+
+.button-success {
+    -fx-background-color: rgb(28, 184, 65);
+}
+
+.button-success:hover {
+    -fx-background-color: rgb(27, 145, 57);
+}
+
+.button-danger {
+    -fx-background-color: rgb(202, 60, 60);
+}
+
+.button-danger:hover {
+    -fx-background-color: rgb(158, 48, 48);
+}
